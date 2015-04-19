@@ -21,9 +21,9 @@ The samples are independent and identically distributed. This is what sampling l
 
 #### Hidden Markov Models (HMM)
 
-Hidden Markov Models can be though of as generalizations of mixture models to where observations are related in time (i.e no longer independent). We assume that the the hidden variables form a [Markov Chain](http://en.wikipedia.org/wiki/Markov_chain). HMM have one more parameter than EMs - a transition matrix describing the probabilities of jumping between different states.
+Hidden Markov Models can be though of as generalizations of mixture models to the case where observations are related in time (i.e no longer independent). We assume that the the hidden variables form a [Markov Chain](http://en.wikipedia.org/wiki/Markov_chain). HMM have one more parameter than EMs - a transition matrix describing the probabilities of jumping between different states.
 
-Sampling from HMMs is very similiar to mixture models - the only difference is that the distribution of the hidden variable depends on the previous state. Here is an example with the same parameters above and a diagonal-heavy transition matrix (0.8 on the diagonal, 0.1 on the off-diagonals):
+Sampling from HMMs is very similiar to mixture models - the only difference is that the distribution of the hidden variable depends on the previous state. Here is an example with the same Gaussian kernels as above and a diagonal-heavy transition matrix (0.8 on the diagonal, 0.1 on the off-diagonals):
 ![sample-gmm](sample-HMM.gif)
 
 With this HMM, there is only a 20% chance of leaving a state, so the system doesn't jump between states as often as before.
@@ -31,9 +31,15 @@ With this HMM, there is only a 20% chance of leaving a state, so the system does
 #### References
 
 [Pattern Recognition and Machine Learning (Bishop)](http://www.amazon.com/Pattern-Recognition-Learning-Information-Statistics/dp/0387310738) -
-examples are taken from this bible of machine learning Machine Learning.
+examples are taken from this bible of Machine Learning.
 
+
+#### Dependencies
+`MASS`, `mvtnorm` (available on CRAN)
+
+#### Quick Start
+`> source('sim.R')` to run examples of sampling HMMs/GMMs and fitting a GMM. 
 
 #### Wishlist
-- Create an R package with `Roxygen2` styles documentation
-- Implement the Baum-Welch algorithm for fitting HMMs
+- R package with `Roxygen2` styles documentation
+- Implement Baum-Welch algorithm for fitting HMMs
