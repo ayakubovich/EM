@@ -1,11 +1,12 @@
 library(mvtnorm)
 library(MASS)
-library(RHmm)
 
-# 1) generate a sample from a gaussian mixture model, corrupt it with noise and fit the GMM using the EM algorithm
 source("genMM.R")
 source("fitMM.R")
 source("dGMM.R") 
+source("genHMM.R")
+
+# 1) generate a sample from a gaussian mixture model, corrupt it with noise and fit the GMM using the EM algorithm
 
 N <- 100 # number of points to sample
 niterations <- 200 #number of iterations in EM algorithm
@@ -21,10 +22,6 @@ fitMM(y1, niterations)
 
 ####
 # 2) Generate a sequence of observations from a Hidden Markov Model
-source("genHMM.R")
-source("fitHMM.R")
-
 # use same multivariate kernels as before, but add a diagonal-heavy transition matrix
 A <- matrix(c(c(.8,.1,.1), c(.1,.8,.1), c(.1, .1, .8)),3, byrow=T) # transition matrix
 y2 <- genHMM(N, mu, sigma, p, A, vis=1)
-fitHMM(y2, maxIt=200)
