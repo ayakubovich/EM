@@ -13,9 +13,9 @@ fitMM <- function(y, maxIt=200){
   library(mvtnorm)
   
   # algorithm parameters
-  # maxIt<-200 # maximum number of iterations
-  K<-3 # mixture complexity
-  N<-nrow(y)
+  
+  K <- 3 # mixture complexity
+  N <- nrow(y)
   enk <- matrix(nrow=N, ncol=K)
   
   # initialization 
