@@ -3,12 +3,16 @@
 
 # INPUTS
 # N = size of sample
+# mu = mean of multivariate normal kernel
+# sigma = covariance matrix of multivariate normal kernel
+# p = vector of initial probabilities
+# A = transition matrix
 # vis = option to visulize the generating process (=1 for yes, = 0 for no)
 
 # OUTPUT
-# y = generated seauence of observations
+# y = generated sequence of observations
 
-genHMM<-function(N=200, vis=1){
+genHMM <-function(N=200, mu, sigma, p, A, vis=1){
 
 library(MASS)
 set.seed(10)
@@ -18,19 +22,10 @@ nstates <- 3
 z<-mat.or.vec(N, nstates)
 y<-mat.or.vec(N,2)
 
-# mean and (common) covariance for the 3 multivariate normal kernels
-mu <- matrix(c(0,0, 0,12, 6,6),3, byrow=T) 
-sigma <- diag(c(1,1)) 
-
-# transition matrix
-# A <- matrix(c(c(0.9, 0.05,0.05), c(0.05,0.9,0.05), c(0.05, 0.05, 0.9)),3, byrow=T)
-A <- matrix(c(c(.8,.1,.1), c(.1,.8,.1), c(.1, .1, .8)),3, byrow=T)
-
 # simulate observations
 
 # generate and plot 1st point 
-#z[1,] <- t(rmultinom(1, size=1, prob = c(0.33, 0.33, 0.33)))
-z[1,] <- t(rmultinom(1, size=1, prob = c(0.2, 0.6, 0.2)))
+z[1,] <- t(rmultinom(1, size=1, prob = p))
 y[1,] <- mvrnorm(1, mu[z[1,]==1], sigma)
 if (vis) {
   plot(y[1,1], y[1,2], xlim=c(-5,10), ylim=c(-5,15), col = which(z[1,]>0) + 1, pch=16, xlab='x', ylab='y')

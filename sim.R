@@ -1,24 +1,30 @@
-# 6631 Applied Statistics II Final Project Code
-# Alex Yakubovich
-# April 11, 2012
+library(mvtnorm)
+library(MASS)
+library(RHmm)
 
-# part 1) generate a sample from a gaussian mixture model, corrupt it with noise and fit the GMM usingt the EM algorithm
+# 1) generate a sample from a gaussian mixture model, corrupt it with noise and fit the GMM using the EM algorithm
+source("genMM.R")
+source("fitMM.R")
+source("dGMM.R") 
 
-# part 2) generate a sequence of observations from a hidden markov model, corrupt it with noise and fit the HMM usingt the EM algorithm for HMM. 
-# The RHmm package is used to compute the responsibilities in the E-step
+N <- 100 # number of points to sample
+niterations <- 200 #number of iterations in EM algorithm
 
-# 1) mixture model
-source("genMM.r")
-source("fitMM.r")
-source("dGMM.r") 
-y1<-genMM(N=100, vis=1)
-y1<- y1+ rmvnorm(100, mean=c(0,0), sigma=diag(2)) # corrupt with iid zero mean isotropic gaussian noise
-fitMM(y1, maxIt=200)
+# specify parameters of gaussian mixture model
+mu <- matrix(c(0,0, 0,12, 6,6),3, byrow=T) #means of multivariate normal kernels
+sigma <- diag(c(1,1)) # common covariance matrix
+p <- c(.2, .2, .6)  #mixing proportions
 
-# 2) hidden markov model
-source("genHMM.r")
-source("fitHMM.r")
+y1 <- genMM(N, mu, sigma, p, vis=1) # generate data from a gaussian mixture model
+y1 <- y1+ rmvnorm(N, mean=c(0,0), sigma=diag(2)) # corrupt with iid zero mean isotropic gaussian noise
+fitMM(y1, niterations)
 
-y2 <- genHMM(N=100, vis=1)
-y2 <- y2 + rmvnorm(100, mean=c(0,0), sigma=diag(2)) # corrupt with iid zero mean isotropic gaussian noise
+####
+# 2) Generate a sequence of observations from a Hidden Markov Model
+source("genHMM.R")
+source("fitHMM.R")
+
+# use same multivariate kernels as before, but add a diagonal-heavy transition matrix
+A <- matrix(c(c(.8,.1,.1), c(.1,.8,.1), c(.1, .1, .8)),3, byrow=T) # transition matrix
+y2 <- genHMM(N, mu, sigma, p, A, vis=1)
 fitHMM(y2, maxIt=200)
